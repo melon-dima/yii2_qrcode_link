@@ -36,7 +36,7 @@ services:
     env_file:
       - .env
     volumes:
-      - mysql_data2:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     logging:
       driver: json-file
       options:
@@ -57,4 +57,4 @@ networks:
     external: true
 
 volumes:
-  mysql_data2:
+  mysql_data:
