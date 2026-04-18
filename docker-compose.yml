@@ -1,0 +1,60 @@
+﻿name: yii2_qrcode_link
+
+services:
+  task_php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task_php
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Moscow
+    volumes:
+      - ./:/var/www/html
+      - ./runtime/logs/nginx:/var/log/nginx
+      - ./nginx.conf:/etc/nginx/conf.d/localhost.conf
+    ports:
+      - "5005:80"
+    #labels:
+    #  - traefik.enable=true
+    #  - traefik.http.services.laravel_wlovers.loadbalancer.server.port=80
+    #  - traefik.http.routers.wlovers.rule=Host(`site.local`)
+    #  - traefik.http.routers.wlovers_http.entrypoints=web
+    #  - traefik.http.routers.wlovers_http.service=laravel_wlovers
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - traefik_default
+
+  task_database:
+    image: mysql:8.0
+    container_name: task_database
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - mysql_data2:/var/lib/mysql
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 20
+    command: --bind-address=0.0.0.0
+    networks:
+      - traefik_default
+
+networks:
+  traefik_default:
+    external: true
+
+volumes:
+  mysql_data2:
