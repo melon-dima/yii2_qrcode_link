@@ -41,17 +41,7 @@ docker compose ps
 
 ### 4. Миграции
 
-Запуск с хоста:
-
-```bash
-docker exec task_php php yii migrate
-```
-
-На вопрос `Apply the above migration? (yes|no) [no]:` ответьте `y`.
-
-
-
-### 5. Вход в контейнер (если нужно)
+Вход в контейнер 
 
 ```bash
 docker exec -it task_php bash
@@ -63,18 +53,4 @@ docker exec -it task_php bash
 php yii migrate
 ```
 
-И также ответьте `y`.
-
-## Полезные команды
-
-Логи:
-
-```bash
-docker compose logs -f task_php task_database
-```
-
-Остановка:
-
-```bash
-docker compose down
-```
+На вопрос `Apply the above migration? (yes|no) [no]:` ответьте `y`.
